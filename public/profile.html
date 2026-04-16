@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoxPop — Профиль</title>
+    <link rel="icon" type="image/png" href="static/img/favicon.png">
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<header class="site-header border-bottom">
+    <div class="container py-3">
+        <div class="row align-items-center gy-3">
+            <div class="col-12 col-md-3">
+                <a href="index.html" class="logo-link">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="static/img/logo.png" alt="Логотип VoxPop" class="site-logo">
+                        <span class="site-title">VoxPop</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-12 col-md-5">
+                <form action="#" method="get">
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            class="form-control search-input"
+                            placeholder="Поиск вопросов"
+                            aria-label="Поиск вопросов"
+                        >
+                        <button class="btn btn-outline-primary search-btn" type="submit">Найти</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-6 col-md-2">
+                <a href="ask.html" class="btn btn-primary ask-btn w-100">Задать вопрос</a>
+            </div>
+
+            <div class="col-6 col-md-2">
+                <div class="user-block d-flex align-items-center justify-content-end gap-2">
+                    <img
+                        src="static/img/anime5.jpg"
+                        alt="Аватар пользователя"
+                        class="user-avatar"
+                    >
+                    <div class="user-info">
+                        <div class="user-name">Биба и Боба</div>
+                        <div><a href="profile.html">Профиль</a></div>
+                        <div><a href="login.html" class="logout-link">Выйти</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="site-main flex-grow-1 py-4">
+    <div class="container">
+        <div class="row g-4">
+            <section class="col-12 col-lg-8">
+                <div class="content-card">
+                    <h1 class="page-title">Настройки профиля</h1>
+
+                    <form action="#" method="post" class="profile-form" enctype="multipart/form-data">
+                        <div class="row g-4 align-items-start">
+                            <div class="col-12 col-md-4">
+                                <div class="profile-avatar-card">
+                                    <img
+                                        src="static/img/anime5.jpg"
+                                        alt="Текущая аватарка"
+                                        class="profile-avatar-preview"
+                                    >
+                                    <div class="form-text mt-3">
+                                        Текущая аватарка пользователя.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-8">
+                                <div class="form-error mb-4">
+                                    Пример ошибки: этот никнейм уже занят.
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="profile-email" class="form-label ask-label">Email</label>
+                                    <input
+                                        type="email"
+                                        id="profile-email"
+                                        class="form-control"
+                                        value="biba.boba@example.com"
+                                    >
+                                    <div class="form-text">
+                                        Укажите актуальный адрес электронной почты.
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="profile-nickname" class="form-label ask-label">Никнейм</label>
+                                    <input
+                                        type="text"
+                                        id="profile-nickname"
+                                        class="form-control"
+                                        value="Биба и Боба"
+                                        maxlength="40"
+                                    >
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="profile-avatar" class="form-label ask-label">Новая аватарка</label>
+                                    <input
+                                        type="file"
+                                        id="profile-avatar"
+                                        class="form-control"
+                                    >
+                                    <div class="form-text">
+                                        Загрузите новое изображение для профиля.
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-wrap gap-2">
+                                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                                    <a href="index.html" class="btn btn-outline-secondary">Отмена</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <aside class="col-12 col-lg-4">
+                <div class="sidebar-card mb-4">
+                    <h2 class="sidebar-title">Популярные теги</h2>
+                    <div class="tags-list">
+                        <a href="#" class="tag-link">мнения</a>
+                        <a href="#" class="tag-link">другое</a>
+                        <a href="#" class="tag-link">игры</a>
+                        <a href="#" class="tag-link">учёба</a>
+                        <a href="#" class="tag-link">школа</a>
+                        <a href="#" class="tag-link">общение</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-card">
+                    <h2 class="sidebar-title">Лучшие участники</h2>
+                    <ul class="top-users-list">
+                        <li><a href="#">ggadk_batman</a></li>
+                        <li><a href="#">wenIafe</a></li>
+                        <li><a href="#">perry_ytkonos_zov4</a></li>
+                        <li><a href="#">cedar_5545</a></li>
+                        <li><a href="#">Биба и Боба</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+</main>
+
+<footer class="site-footer border-top mt-auto">
+    <div class="container py-3 d-flex justify-content-center align-items-center">
+        <span class="footer-text">© 2026 VoxPop</span>
+    </div>
+</footer>
+
+<script src="static/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

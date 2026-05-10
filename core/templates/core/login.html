@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}VoxPop — Вход{% endblock %}
+
+{% block header_user %}
+<div class="text-md-end">
+    <a href="{% url 'core:login' %}" class="auth-link me-2">Войти</a>
+    <a href="{% url 'core:signup' %}" class="auth-link">Регистрация</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <h1 class="page-title">Вход</h1>
+
+    <form action="#" method="post" class="auth-form">
+        {% csrf_token %}
+
+        <div class="form-error mb-4">
+            Пример ошибки: неверный логин или пароль.
+        </div>
+
+        <div class="mb-4">
+            <label for="login-email" class="form-label ask-label">Логин или email</label>
+            <input
+                type="text"
+                id="login-email"
+                name="username"
+                class="form-control"
+                placeholder="Введите логин или email"
+            >
+        </div>
+
+        <div class="mb-4">
+            <label for="login-password" class="form-label ask-label">Пароль</label>
+            <input
+                type="password"
+                id="login-password"
+                name="password"
+                class="form-control"
+                placeholder="Введите пароль"
+            >
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <button type="submit" class="btn btn-primary">Войти</button>
+        </div>
+
+        <div class="form-text">
+            Нет аккаунта?
+            <a href="{% url 'core:signup' %}" class="auth-link">Зарегистрируйтесь</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

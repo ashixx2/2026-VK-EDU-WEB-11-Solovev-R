@@ -1,0 +1,43 @@
+{% load static %}
+
+<article class="question-card">
+    <div class="question-card-left">
+        <img
+            src="{% static question.avatar %}"
+            alt="Аватар автора"
+            class="question-avatar"
+        >
+
+        <div class="vote-box">
+            <button class="vote-btn" type="button">+</button>
+            <div class="vote-count">{{ question.likes }}</div>
+            <button class="vote-btn" type="button">−</button>
+        </div>
+    </div>
+
+    <div class="question-card-body">
+        <h2 class="question-title">
+            <a href="{% url 'questions:question_detail' question.id %}">
+                {{ question.title }}
+            </a>
+        </h2>
+
+        <p class="question-text">
+            {{ question.text }}
+        </p>
+
+        <div class="question-meta">
+            <span>Ответов: {{ question.answers_count }}</span>
+            <span>{{ question.created_at }}</span>
+            <span>Автор: {{ question.author }}</span>
+        </div>
+
+        <div class="question-tags">
+            {% for tag in question.tags %}
+                <a href="{% url 'questions:tag' tag %}" class="tag-link small-tag">
+                    {{ tag }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</article>

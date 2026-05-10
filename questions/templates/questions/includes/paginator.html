@@ -1,0 +1,37 @@
+{% if page.has_other_pages %}
+<nav class="questions-pagination mt-4" aria-label="Навигация по страницам">
+    <ul class="pagination mb-0">
+        {% if page.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page.previous_page_number }}">Назад</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Назад</span>
+            </li>
+        {% endif %}
+
+        {% for page_number in page.paginator.page_range %}
+            {% if page_number == page.number %}
+                <li class="page-item active">
+                    <span class="page-link">{{ page_number }}</span>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page.next_page_number }}">Вперёд</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Вперёд</span>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

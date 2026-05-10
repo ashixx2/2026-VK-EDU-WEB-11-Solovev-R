@@ -7,13 +7,20 @@ __pycache__/
 # Virtual environments
 venv/
 .venv/
-.env/
 
-# Django
-*.sqlite3
+# Environment variables
+.env
+
+# Django database
 db.sqlite3
-media/
-staticfiles/
+*.sqlite3
+
+# User uploaded files
+/media/
+
+# Collected static files
+/staticfiles/
+/static/
 
 # IDE
 .idea/

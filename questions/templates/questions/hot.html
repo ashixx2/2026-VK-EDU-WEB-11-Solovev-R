@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Популярные вопросы{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <div class="questions-header">
+        <div>
+            <h1 class="page-title">Популярные вопросы</h1>
+
+            <nav class="questions-subnav">
+                <a href="{% url 'questions:index' %}">Новые</a>
+                <a href="{% url 'questions:hot' %}" class="active-subnav-link">Популярные</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="question-list">
+        {% for question in page.object_list %}
+            {% include 'questions/includes/question_card.html' %}
+        {% endfor %}
+    </div>
+
+    {% include 'questions/includes/paginator.html' %}
+</div>
+{% endblock %}

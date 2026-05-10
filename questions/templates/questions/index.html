@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}VoxPop — Лента вопросов{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <div class="questions-header">
+        <div>
+            <h1 class="page-title mb-2">Новые вопросы</h1>
+
+            <div class="questions-subnav">
+                <a href="{% url 'questions:index' %}" class="active-subnav-link">Новые</a>
+                <a href="{% url 'questions:hot' %}">Популярные</a>
+                <a href="#">По рейтингу</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="question-list">
+        {% for question in page.object_list %}
+            {% include 'questions/includes/question_card.html' %}
+        {% endfor %}
+    </div>
+
+    {% include 'questions/includes/paginator.html' %}
+</div>
+{% endblock %}

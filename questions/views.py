@@ -118,7 +118,9 @@ def tag(request, tag_name):
 
 
 def question_detail(request, question_id):
-    question = make_questions()[(question_id - 1) % len(make_questions())]
+    questions = make_questions()
+    question = questions[(question_id - 1) % len(questions)].copy()
+    question['id'] = question_id
 
     answers = [
         {

@@ -9,6 +9,8 @@
     <div class="question-list">
         {% for question in page.object_list %}
             {% include 'questions/includes/question_card.html' %}
+        {% empty %}
+            <p class="empty-content">По этому тегу пока нет вопросов.</p>
         {% endfor %}
     </div>
 

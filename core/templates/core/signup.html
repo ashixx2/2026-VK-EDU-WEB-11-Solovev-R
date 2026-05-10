@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}VoxPop — Регистрация{% endblock %}
+
+{% block header_user %}
+<div class="text-md-end">
+    <a href="{% url 'core:login' %}" class="auth-link me-2">Войти</a>
+    <a href="{% url 'core:signup' %}" class="auth-link">Регистрация</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <h1 class="page-title">Регистрация</h1>
+
+    <form action="#" method="post" class="auth-form" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-error mb-4">
+            Пример ошибки: такой email уже используется.
+        </div>
+
+        <div class="mb-4">
+            <label for="signup-email" class="form-label ask-label">Email</label>
+            <input
+                type="email"
+                id="signup-email"
+                name="email"
+                class="form-control"
+                placeholder="Введите email"
+            >
+            <div class="form-text">
+                Пример ошибки поля: вы ввели неверный адрес электронной почты.
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="signup-login" class="form-label ask-label">Логин</label>
+            <input
+                type="text"
+                id="signup-login"
+                name="username"
+                class="form-control"
+                placeholder="Введите логин"
+                maxlength="30"
+            >
+        </div>
+
+        <div class="mb-4">
+            <label for="signup-nickname" class="form-label ask-label">Никнейм</label>
+            <input
+                type="text"
+                id="signup-nickname"
+                name="nickname"
+                class="form-control"
+                placeholder="Введите отображаемое имя"
+                maxlength="40"
+            >
+        </div>
+
+        <div class="mb-4">
+            <label for="signup-password" class="form-label ask-label">Пароль</label>
+            <input
+                type="password"
+                id="signup-password"
+                name="password"
+                class="form-control"
+                placeholder="Введите пароль"
+            >
+        </div>
+
+        <div class="mb-4">
+            <label for="signup-password-repeat" class="form-label ask-label">Повторите пароль</label>
+            <input
+                type="password"
+                id="signup-password-repeat"
+                name="password_repeat"
+                class="form-control"
+                placeholder="Повторите пароль"
+            >
+            <div class="form-text">
+                Пароли должны совпадать.
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="signup-avatar" class="form-label ask-label">Аватарка</label>
+            <input
+                type="file"
+                id="signup-avatar"
+                name="avatar"
+                class="form-control"
+            >
+            <div class="form-text">
+                Загрузите изображение профиля.
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+        </div>
+
+        <div class="form-text">
+            Уже есть аккаунт?
+            <a href="{% url 'core:login' %}" class="auth-link">Войти</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

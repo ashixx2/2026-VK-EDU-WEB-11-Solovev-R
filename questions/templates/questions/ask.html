@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}VoxPop — Задать вопрос{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <h1 class="page-title">Задать вопрос</h1>
+
+    <form action="#" method="post" class="ask-form">
+        {% csrf_token %}
+
+        <div class="mb-4">
+            <label for="question-title" class="form-label ask-label">Заголовок</label>
+            <input
+                type="text"
+                id="question-title"
+                name="title"
+                class="form-control"
+                placeholder="Введите заголовок"
+                maxlength="150"
+            >
+            <div class="form-text">
+                Кратко опишите суть вопроса
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="question-text" class="form-label ask-label">Текст вопроса</label>
+            <textarea
+                id="question-text"
+                name="text"
+                class="form-control ask-textarea"
+                placeholder="Опишите вопрос"
+                rows="8"
+            ></textarea>
+            <div class="form-text">
+                Чем подробнее описание, тем проще другим пользователям вам помочь.
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="question-tags" class="form-label ask-label">Теги</label>
+            <input
+                type="text"
+                id="question-tags"
+                name="tags"
+                class="form-control"
+                placeholder="Введите тег. Например: учёба, игры, общение"
+            >
+            <div class="form-text">
+                Укажите не более 3 тегов через запятую.
+            </div>
+        </div>
+
+        <div class="form-error mb-4">
+            Пример ошибки: вы указали слишком много тегов.
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary">Опубликовать</button>
+            <a href="{% url 'questions:index' %}" class="btn btn-outline-secondary">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

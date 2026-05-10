@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}VoxPop — Профиль{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <h1 class="page-title">Настройки профиля</h1>
+
+    <form action="#" method="post" class="profile-form" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row g-4 align-items-start">
+            <div class="col-12 col-md-4">
+                <div class="profile-avatar-card">
+                    <img
+                        src="{% static 'questions/img/anime5.jpg' %}"
+                        alt="Текущая аватарка"
+                        class="profile-avatar-preview"
+                    >
+                    <div class="form-text mt-3">
+                        Текущая аватарка пользователя.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-8">
+                <div class="form-error mb-4">
+                    Пример ошибки: этот никнейм уже занят.
+                </div>
+
+                <div class="mb-4">
+                    <label for="profile-email" class="form-label ask-label">Email</label>
+                    <input
+                        type="email"
+                        id="profile-email"
+                        name="email"
+                        class="form-control"
+                        value="biba.boba@example.com"
+                    >
+                    <div class="form-text">
+                        Укажите актуальный адрес электронной почты.
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="profile-nickname" class="form-label ask-label">Никнейм</label>
+                    <input
+                        type="text"
+                        id="profile-nickname"
+                        name="nickname"
+                        class="form-control"
+                        value="Биба и Боба"
+                        maxlength="40"
+                    >
+                </div>
+
+                <div class="mb-4">
+                    <label for="profile-avatar" class="form-label ask-label">Новая аватарка</label>
+                    <input
+                        type="file"
+                        id="profile-avatar"
+                        name="avatar"
+                        class="form-control"
+                    >
+                    <div class="form-text">
+                        Загрузите новое изображение для профиля.
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                    <a href="{% url 'questions:index' %}" class="btn btn-outline-secondary">Отмена</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

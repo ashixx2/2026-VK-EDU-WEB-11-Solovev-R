@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Тег: {{ tag_name }}{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <h1 class="page-title">Вопросы по тегу: {{ tag_name }}</h1>
+
+    <div class="question-list">
+        {% for question in page.object_list %}
+            {% include 'questions/includes/question_card.html' %}
+        {% endfor %}
+    </div>
+
+    {% include 'questions/includes/paginator.html' %}
+</div>
+{% endblock %}

@@ -32,7 +32,7 @@ def login_view(request):
 
     return render(request, "core/login.html", {
         "form": form,
-        "next": request.GET.get("next", ""),
+        "next": request.POST.get("next") or request.GET.get("next", ""),
     })
 
 

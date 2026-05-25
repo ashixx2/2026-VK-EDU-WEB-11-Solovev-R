@@ -1,5 +1,8 @@
-from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 
+from .forms import AnswerForm, QuestionForm, get_answer_page_number
 from .models import Answer, Question, Tag
 from .utils import paginate
 
@@ -37,13 +40,35 @@ def tag(request, tag_name):
 
 def question_detail(request, question_id):
     question = get_object_or_404(Question.objects.new(), pk=question_id)
+    form = AnswerForm(request.POST or None)
+
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            login_url = f"{reverse('core:login')}?next={request.path}"
+            return redirect(login_url)
+
+        if form.is_valid():
+            answer = form.save(author=request.user, question=question)
+            page_number = get_answer_page_number(question, ANSWERS_PER_PAGE)
+            return redirect(f"{question.get_absolute_url()}?page={page_number}#answer-{answer.id}")
+
     page = paginate(Answer.objects.for_question(question), request, ANSWERS_PER_PAGE)
 
     return render(request, "questions/question_detail.html", {
         "question": question,
         "page": page,
+        "form": form,
     })
 
 
+@login_required(login_url="core:login")
 def ask(request):
-    return render(request, "questions/ask.html")
+    form = QuestionForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        question = form.save(author=request.user)
+        return redirect(question.get_absolute_url())
+
+    return render(request, "questions/ask.html", {
+        "form": form,
+    })

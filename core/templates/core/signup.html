@@ -2,97 +2,71 @@
 
 {% block title %}VoxPop — Регистрация{% endblock %}
 
-{% block header_user %}
-<div class="text-md-end">
-    <a href="{% url 'core:login' %}" class="auth-link me-2">Войти</a>
-    <a href="{% url 'core:signup' %}" class="auth-link">Регистрация</a>
-</div>
-{% endblock %}
-
 {% block content %}
 <div class="content-card">
     <h1 class="page-title">Регистрация</h1>
 
-    <form action="#" method="post" class="auth-form" enctype="multipart/form-data">
+    <form action="{% url 'core:signup' %}" method="post" class="auth-form">
         {% csrf_token %}
 
-        <div class="form-error mb-4">
-            Пример ошибки: такой email уже используется.
-        </div>
-
-        <div class="mb-4">
-            <label for="signup-email" class="form-label ask-label">Email</label>
-            <input
-                type="email"
-                id="signup-email"
-                name="email"
-                class="form-control"
-                placeholder="Введите email"
-            >
-            <div class="form-text">
-                Пример ошибки поля: вы ввели неверный адрес электронной почты.
+        {% if form.non_field_errors %}
+            <div class="form-error mb-4">
+                {% for error in form.non_field_errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
             </div>
+        {% endif %}
+
+        <div class="mb-4">
+            <label for="{{ form.email.id_for_label }}" class="form-label ask-label">
+                {{ form.email.label }}
+            </label>
+            {{ form.email }}
+            {% for error in form.email.errors %}
+                <div class="form-error mt-2">{{ error }}</div>
+            {% endfor %}
         </div>
 
         <div class="mb-4">
-            <label for="signup-login" class="form-label ask-label">Логин</label>
-            <input
-                type="text"
-                id="signup-login"
-                name="username"
-                class="form-control"
-                placeholder="Введите логин"
-                maxlength="30"
-            >
+            <label for="{{ form.username.id_for_label }}" class="form-label ask-label">
+                {{ form.username.label }}
+            </label>
+            {{ form.username }}
+            {% for error in form.username.errors %}
+                <div class="form-error mt-2">{{ error }}</div>
+            {% endfor %}
         </div>
 
         <div class="mb-4">
-            <label for="signup-nickname" class="form-label ask-label">Никнейм</label>
-            <input
-                type="text"
-                id="signup-nickname"
-                name="nickname"
-                class="form-control"
-                placeholder="Введите отображаемое имя"
-                maxlength="40"
-            >
+            <label for="{{ form.first_name.id_for_label }}" class="form-label ask-label">
+                {{ form.first_name.label }}
+            </label>
+            {{ form.first_name }}
+            {% for error in form.first_name.errors %}
+                <div class="form-error mt-2">{{ error }}</div>
+            {% endfor %}
         </div>
 
         <div class="mb-4">
-            <label for="signup-password" class="form-label ask-label">Пароль</label>
-            <input
-                type="password"
-                id="signup-password"
-                name="password"
-                class="form-control"
-                placeholder="Введите пароль"
-            >
+            <label for="{{ form.password.id_for_label }}" class="form-label ask-label">
+                {{ form.password.label }}
+            </label>
+            {{ form.password }}
+            {% for error in form.password.errors %}
+                <div class="form-error mt-2">{{ error }}</div>
+            {% endfor %}
         </div>
 
         <div class="mb-4">
-            <label for="signup-password-repeat" class="form-label ask-label">Повторите пароль</label>
-            <input
-                type="password"
-                id="signup-password-repeat"
-                name="password_repeat"
-                class="form-control"
-                placeholder="Повторите пароль"
-            >
+            <label for="{{ form.password_repeat.id_for_label }}" class="form-label ask-label">
+                {{ form.password_repeat.label }}
+            </label>
+            {{ form.password_repeat }}
+            {% for error in form.password_repeat.errors %}
+                <div class="form-error mt-2">{{ error }}</div>
+            {% endfor %}
             <div class="form-text">
-                Пароли должны совпадать.
-            </div>
-        </div>
-
-        <div class="mb-4">
-            <label for="signup-avatar" class="form-label ask-label">Аватарка</label>
-            <input
-                type="file"
-                id="signup-avatar"
-                name="avatar"
-                class="form-control"
-            >
-            <div class="form-text">
-                Загрузите изображение профиля.
+                Пароль должен пройти стандартную проверку Django.
             </div>
         </div>
 

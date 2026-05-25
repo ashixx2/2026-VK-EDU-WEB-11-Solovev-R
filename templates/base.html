@@ -41,23 +41,42 @@
             </div>
 
             <div class="col-6 col-md-2">
-                <a href="{% url 'questions:ask' %}" class="btn btn-primary ask-btn w-100">Задать вопрос</a>
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'questions:ask' %}" class="btn btn-primary ask-btn w-100">
+                        Задать вопрос
+                    </a>
+                {% else %}
+                    <span
+                        class="btn btn-primary ask-btn w-100 disabled"
+                        title="Войдите, чтобы задать вопрос"
+                        aria-disabled="true"
+                    >
+                        Задать вопрос
+                    </span>
+                {% endif %}
             </div>
 
             <div class="col-6 col-md-2">
                 {% block header_user %}
-                <div class="user-block d-flex align-items-center justify-content-end gap-2">
-                    <img
-                        src="{% static 'questions/img/anime5.jpg' %}"
-                        alt="Аватар пользователя"
-                        class="user-avatar"
-                    >
-                    <div class="user-info">
-                        <div class="user-name">Биба и Боба</div>
-                        <div><a href="{% url 'core:profile' %}">Профиль</a></div>
-                        <div><a href="{% url 'core:login' %}" class="logout-link">Выйти</a></div>
-                    </div>
-                </div>
+                    {% if request.user.is_authenticated %}
+                        <div class="user-block d-flex align-items-center justify-content-end gap-2">
+                            <img
+                                src="{% static request.user.profile.avatar %}"
+                                alt="Аватар пользователя"
+                                class="user-avatar"
+                            >
+                            <div class="user-info">
+                                <div class="user-name">{{ request.user.username }}</div>
+                                <div><a href="{% url 'core:profile' %}">Профиль</a></div>
+                                <div><a href="{% url 'core:logout' %}" class="logout-link">Выйти</a></div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-md-end">
+                            <a href="{% url 'core:login' %}" class="auth-link me-2">Войти</a>
+                            <a href="{% url 'core:signup' %}" class="auth-link">Регистрация</a>
+                        </div>
+                    {% endif %}
                 {% endblock %}
             </div>
         </div>

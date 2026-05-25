@@ -1,14 +1,32 @@
 services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    env_file:
+      - .env.docker
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U voxpop_user -d voxpop"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
+    restart: unless-stopped
     ports:
       - "8000:8000"
     volumes:
       - .:/app
       - media_volume:/app/media
     env_file:
-      - .env
+      - .env.docker
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
+  postgres_data:
   media_volume:

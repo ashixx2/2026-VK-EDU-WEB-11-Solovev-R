@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Count, Sum
+from django.db.models import Count, IntegerField, OuterRef, Subquery, Sum
 from django.db.models.functions import Coalesce
 from django.urls import reverse
 
@@ -52,8 +52,19 @@ class QuestionQuerySet(models.QuerySet):
         return self.select_related("author", "author__profile").prefetch_related("tags")
 
     def with_counters(self):
+        rating_subquery = (
+            QuestionLike.objects
+            .filter(question=OuterRef("pk"))
+            .values("question")
+            .annotate(total=Sum("value"))
+            .values("total")
+        )
+
         return self.annotate(
-            rating=Coalesce(Sum("question_likes__value"), 0),
+            rating=Coalesce(
+                Subquery(rating_subquery, output_field=IntegerField()),
+                0,
+            ),
             answers_count=Count("answers", distinct=True),
         )
 
@@ -126,6 +137,41 @@ class Question(models.Model):
     def get_absolute_url(self):
         return reverse("questions:question_detail", kwargs={"question_id": self.pk})
 
+class AnswerQuerySet(models.QuerySet):
+    def with_related_data(self):
+        return self.select_related("author", "author__profile", "question")
+
+    def with_counters(self):
+        rating_subquery = (
+            AnswerLike.objects
+            .filter(answer=OuterRef("pk"))
+            .values("answer")
+            .annotate(total=Sum("value"))
+            .values("total")
+        )
+
+        return self.annotate(
+            rating=Coalesce(
+                Subquery(rating_subquery, output_field=IntegerField()),
+                0,
+            ),
+        )
+
+    def for_question(self, question):
+        return (
+            self.filter(question=question)
+            .with_related_data()
+            .with_counters()
+            .order_by("created_at")
+        )
+
+
+class AnswerManager(models.Manager):
+    def get_queryset(self):
+        return AnswerQuerySet(self.model, using=self._db)
+
+    def for_question(self, question):
+        return self.get_queryset().for_question(question)
 
 class Answer(models.Model):
     question = models.ForeignKey(
@@ -155,6 +201,7 @@ class Answer(models.Model):
         auto_now=True,
         verbose_name="дата обновления",
     )
+    objects = AnswerManager()
 
     class Meta:
         verbose_name = "ответ"

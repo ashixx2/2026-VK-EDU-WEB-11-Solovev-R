@@ -9,9 +9,15 @@
         >
 
         <div class="vote-box">
-            <button class="vote-btn" type="button">+</button>
-            <div class="vote-count">{{ question.rating|default:0 }}</div>
-            <button class="vote-btn" type="button">−</button>
+            {% if request.user.is_authenticated %}
+                <button class="vote-btn" type="button" title="Поставить лайк">+</button>
+                <div class="vote-count">{{ question.rating|default:0 }}</div>
+                <button class="vote-btn" type="button" title="Поставить дизлайк">−</button>
+            {% else %}
+                <button class="vote-btn" type="button" disabled title="Войдите, чтобы голосовать">+</button>
+                <div class="vote-count">{{ question.rating|default:0 }}</div>
+                <button class="vote-btn" type="button" disabled title="Войдите, чтобы голосовать">−</button>
+            {% endif %}
         </div>
     </div>
 

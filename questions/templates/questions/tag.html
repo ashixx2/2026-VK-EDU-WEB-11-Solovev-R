@@ -10,7 +10,12 @@
         {% for question in page.object_list %}
             {% include 'questions/includes/question_card.html' %}
         {% empty %}
-            <p class="empty-content">По этому тегу пока нет вопросов.</p>
+            <div class="empty-content">
+                <p class="mb-3">По этому тегу пока нет вопросов.</p>
+                <a href="{% url 'questions:ask' %}" class="btn btn-primary">
+                    Задать вопрос
+                </a>
+            </div>
         {% endfor %}
     </div>
 

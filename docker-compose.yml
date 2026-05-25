@@ -7,6 +7,8 @@ services:
     volumes:
       - .:/app
       - media_volume:/app/media
+    env_file:
+      - .env
 
 volumes:
   media_volume:

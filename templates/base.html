@@ -76,23 +76,18 @@
                 <div class="sidebar-card mb-4">
                     <h2 class="sidebar-title">Популярные теги</h2>
                     <div class="tags-list">
-                        <a href="{% url 'questions:tag' 'мнения' %}" class="tag-link">мнения</a>
-                        <a href="{% url 'questions:tag' 'другое' %}" class="tag-link">другое</a>
-                        <a href="{% url 'questions:tag' 'игры' %}" class="tag-link">игры</a>
-                        <a href="{% url 'questions:tag' 'учёба' %}" class="tag-link">учёба</a>
-                        <a href="{% url 'questions:tag' 'школа' %}" class="tag-link">школа</a>
-                        <a href="{% url 'questions:tag' 'общение' %}" class="tag-link">общение</a>
+                        {% for tag in popular_tags %}
+                            <a href="{% url 'questions:tag' tag %}" class="tag-link">{{ tag }}</a>
+                        {% endfor %}
                     </div>
                 </div>
 
                 <div class="sidebar-card">
                     <h2 class="sidebar-title">Лучшие участники</h2>
                     <ul class="top-users-list">
-                        <li><a href="#">ggadk_batman</a></li>
-                        <li><a href="#">wenIafe</a></li>
-                        <li><a href="#">perry_ytkonos_zov4</a></li>
-                        <li><a href="#">cedar_5545</a></li>
-                        <li><a href="#">Биба и Боба</a></li>
+                        {% for user in top_users %}
+                            <li><a href="#">{{ user }}</a></li>
+                        {% endfor %}
                     </ul>
                 </div>
             </aside>

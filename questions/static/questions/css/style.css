@@ -705,3 +705,34 @@ body {
         height: 100px;
     }
 }
+.pagination .page-link {
+    min-width: 38px;
+    min-height: 38px;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination .page-item.active .page-link {
+    color: #ffffff;
+    font-weight: 600;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+.pagination .page-item.active > .page-link,
+.pagination .page-item.active span.page-link {
+    color: #ffffff !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}

@@ -52,7 +52,7 @@
         </div>
 
         {% for answer in page.object_list %}
-            <article class="answer-card">
+            <article class="answer-card" id="answer-{{ answer.id }}">
                 <div class="answer-left">
                     <img
                         src="{% static answer.author.profile.avatar %}"
@@ -100,24 +100,48 @@
     <div class="answer-form-block">
         <h2 class="form-title">Ваш ответ</h2>
 
-        <form action="#" method="post">
-            {% csrf_token %}
+        {% if request.user.is_authenticated %}
+            <form action="{% url 'questions:question_detail' question.id %}" method="post">
+                {% csrf_token %}
 
-            <div class="mb-3">
-                <textarea
-                    class="form-control answer-textarea"
-                    rows="6"
-                    placeholder="Введите ваш ответ"
-                    name="text"
-                ></textarea>
+                {% if form.non_field_errors %}
+                    <div class="form-error mb-3">
+                        {% for error in form.non_field_errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="mb-3">
+                    {{ form.text }}
+                    {% for error in form.text.errors %}
+                        <div class="form-error mt-2">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-text mb-3">
+                    Постарайтесь написать развёрнутый и понятный ответ.
+                </div>
+
+                <button type="submit" class="btn btn-primary">Ответить</button>
+            </form>
+        {% else %}
+            <textarea
+                class="form-control answer-textarea"
+                rows="6"
+                placeholder="Введите ваш ответ"
+                disabled
+                title="Войдите, чтобы оставить ответ"
+            ></textarea>
+
+            <div class="form-text mt-3 mb-3">
+                Войдите, чтобы оставить ответ на вопрос.
             </div>
 
-            <div class="form-text mb-3">
-                Постарайтесь написать развёрнутый и понятный ответ.
-            </div>
-
-            <button type="submit" class="btn btn-primary">Ответить</button>
-        </form>
+            <a href="{% url 'core:login' %}?next={{ request.path }}" class="btn btn-primary">
+                Войти
+            </a>
+        {% endif %}
     </div>
 
 </div>

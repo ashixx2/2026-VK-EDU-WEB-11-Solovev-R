@@ -2,44 +2,43 @@
 
 {% block title %}VoxPop — Вход{% endblock %}
 
-{% block header_user %}
-<div class="text-md-end">
-    <a href="{% url 'core:login' %}" class="auth-link me-2">Войти</a>
-    <a href="{% url 'core:signup' %}" class="auth-link">Регистрация</a>
-</div>
-{% endblock %}
-
 {% block content %}
 <div class="content-card">
     <h1 class="page-title">Вход</h1>
 
-    <form action="#" method="post" class="auth-form">
+    <form action="{% url 'core:login' %}" method="post" class="auth-form">
         {% csrf_token %}
 
-        <div class="form-error mb-4">
-            Пример ошибки: неверный логин или пароль.
+        {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
+
+        {% if form.non_field_errors %}
+            <div class="form-error mb-4">
+                {% for error in form.non_field_errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="mb-4">
+            <label for="{{ form.login.id_for_label }}" class="form-label ask-label">
+                {{ form.login.label }}
+            </label>
+            {{ form.login }}
+            {% for error in form.login.errors %}
+                <div class="form-error mt-2">{{ error }}</div>
+            {% endfor %}
         </div>
 
         <div class="mb-4">
-            <label for="login-email" class="form-label ask-label">Логин или email</label>
-            <input
-                type="text"
-                id="login-email"
-                name="username"
-                class="form-control"
-                placeholder="Введите логин или email"
-            >
-        </div>
-
-        <div class="mb-4">
-            <label for="login-password" class="form-label ask-label">Пароль</label>
-            <input
-                type="password"
-                id="login-password"
-                name="password"
-                class="form-control"
-                placeholder="Введите пароль"
-            >
+            <label for="{{ form.password.id_for_label }}" class="form-label ask-label">
+                {{ form.password.label }}
+            </label>
+            {{ form.password }}
+            {% for error in form.password.errors %}
+                <div class="form-error mt-2">{{ error }}</div>
+            {% endfor %}
         </div>
 
         <div class="d-flex flex-wrap gap-2 mb-3">

@@ -7,64 +7,64 @@
 <div class="content-card">
     <h1 class="page-title">Настройки профиля</h1>
 
-    <form action="#" method="post" class="profile-form" enctype="multipart/form-data">
+    <form action="{% url 'core:profile' %}" method="post" class="profile-form">
         {% csrf_token %}
 
         <div class="row g-4 align-items-start">
             <div class="col-12 col-md-4">
                 <div class="profile-avatar-card">
                     <img
-                        src="{% static 'questions/img/anime5.jpg' %}"
+                        src="{% static request.user.profile.avatar %}"
                         alt="Текущая аватарка"
                         class="profile-avatar-preview"
                     >
                     <div class="form-text mt-3">
-                        Текущая аватарка пользователя.
+                        Текущая аватарка пользователя. В этом задании загрузка новой аватарки не сохраняется.
                     </div>
                 </div>
             </div>
 
             <div class="col-12 col-md-8">
-                <div class="form-error mb-4">
-                    Пример ошибки: этот никнейм уже занят.
-                </div>
-
-                <div class="mb-4">
-                    <label for="profile-email" class="form-label ask-label">Email</label>
-                    <input
-                        type="email"
-                        id="profile-email"
-                        name="email"
-                        class="form-control"
-                        value="biba.boba@example.com"
-                    >
-                    <div class="form-text">
-                        Укажите актуальный адрес электронной почты.
+                {% if form.non_field_errors %}
+                    <div class="form-error mb-4">
+                        {% for error in form.non_field_errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
                     </div>
+                {% endif %}
+
+                <div class="mb-4">
+                    <label for="{{ form.email.id_for_label }}" class="form-label ask-label">
+                        {{ form.email.label }}
+                    </label>
+                    {{ form.email }}
+                    {% for error in form.email.errors %}
+                        <div class="form-error mt-2">{{ error }}</div>
+                    {% endfor %}
                 </div>
 
                 <div class="mb-4">
-                    <label for="profile-nickname" class="form-label ask-label">Никнейм</label>
-                    <input
-                        type="text"
-                        id="profile-nickname"
-                        name="nickname"
-                        class="form-control"
-                        value="Биба и Боба"
-                        maxlength="40"
-                    >
+                    <label for="{{ form.username.id_for_label }}" class="form-label ask-label">
+                        {{ form.username.label }}
+                    </label>
+                    {{ form.username }}
+                    {% for error in form.username.errors %}
+                        <div class="form-error mt-2">{{ error }}</div>
+                    {% endfor %}
                 </div>
 
                 <div class="mb-4">
-                    <label for="profile-avatar" class="form-label ask-label">Новая аватарка</label>
+                    <label for="profile-avatar" class="form-label ask-label">Аватарка</label>
                     <input
                         type="file"
                         id="profile-avatar"
                         name="avatar"
                         class="form-control"
+                        disabled
+                        title="Загрузка аватарки в этом задании не реализуется"
                     >
                     <div class="form-text">
-                        Загрузите новое изображение для профиля.
+                        Поле показано по заданию, но сохранение файла аватарки сейчас не выполняется.
                     </div>
                 </div>
 

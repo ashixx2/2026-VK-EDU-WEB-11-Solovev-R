@@ -779,3 +779,12 @@ body {
     color: #495057;
     font-size: 1rem;
 }
+.empty-sidebar-text {
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+.top-users-list span {
+    color: #495057;
+    font-size: 1rem;
+}

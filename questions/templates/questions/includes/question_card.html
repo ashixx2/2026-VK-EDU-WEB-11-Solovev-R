@@ -3,14 +3,14 @@
 <article class="question-card">
     <div class="question-card-left">
         <img
-            src="{% static question.avatar %}"
+            src="{% static question.author.profile.avatar %}"
             alt="Аватар автора"
             class="question-avatar"
         >
 
         <div class="vote-box">
             <button class="vote-btn" type="button">+</button>
-            <div class="vote-count">{{ question.likes }}</div>
+            <div class="vote-count">{{ question.rating|default:0 }}</div>
             <button class="vote-btn" type="button">−</button>
         </div>
     </div>
@@ -27,15 +27,15 @@
         </p>
 
         <div class="question-meta">
-            <span>Ответов: {{ question.answers_count }}</span>
-            <span>{{ question.created_at }}</span>
-            <span>Автор: {{ question.author }}</span>
+            <span>Ответов: {{ question.answers_count|default:0 }}</span>
+            <span>{{ question.created_at|date:"d.m.Y H:i" }}</span>
+            <span>Автор: {{ question.author.username }}</span>
         </div>
 
         <div class="question-tags">
-            {% for tag in question.tags %}
-                <a href="{% url 'questions:tag' tag %}" class="tag-link small-tag">
-                    {{ tag }}
+            {% for tag in question.tags.all %}
+                <a href="{% url 'questions:tag' tag.slug %}" class="tag-link small-tag">
+                    {{ tag.title }}
                 </a>
             {% endfor %}
         </div>

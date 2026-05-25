@@ -19,7 +19,8 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv(BASE_DIR / ".env")
+ENV_FILE = os.getenv("ENV_FILE", ".env.local")
+load_dotenv(BASE_DIR / ENV_FILE, override=False)
 
 
 # Quick-start development settings - unsuitable for production
@@ -61,6 +62,19 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+if DEBUG:
+    INSTALLED_APPS += [
+        "debug_toolbar",
+    ]
+
+    MIDDLEWARE = [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+    ] + MIDDLEWARE
+
+    INTERNAL_IPS = [
+        "127.0.0.1",
+    ]
+
 ROOT_URLCONF = "application.urls"
 
 TEMPLATES = [
@@ -87,8 +101,12 @@ WSGI_APPLICATION = "application.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.postgresql"),
+        "NAME": os.getenv("DB_NAME", "voxpop"),
+        "USER": os.getenv("DB_USER", "voxpop_user"),
+        "PASSWORD": os.getenv("DB_PASSWORD", "voxpop_password"),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", "5432"),
     }
 }
 

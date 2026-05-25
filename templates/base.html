@@ -77,7 +77,11 @@
                     <h2 class="sidebar-title">Популярные теги</h2>
                     <div class="tags-list">
                         {% for tag in popular_tags %}
-                            <a href="{% url 'questions:tag' tag %}" class="tag-link">{{ tag }}</a>
+                            <a href="{% url 'questions:tag' tag.slug %}" class="tag-link">
+                                {{ tag.title }}
+                            </a>
+                        {% empty %}
+                            <span class="empty-sidebar-text">Пока нет тегов</span>
                         {% endfor %}
                     </div>
                 </div>
@@ -86,7 +90,9 @@
                     <h2 class="sidebar-title">Лучшие участники</h2>
                     <ul class="top-users-list">
                         {% for user in top_users %}
-                           <li><span>{{ user }}</span></li>
+                            <li><span>{{ user.username }}</span></li>
+                        {% empty %}
+                            <li><span>Пока нет участников</span></li>
                         {% endfor %}
                     </ul>
                 </div>

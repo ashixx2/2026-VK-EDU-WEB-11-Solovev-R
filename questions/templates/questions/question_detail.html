@@ -9,14 +9,14 @@
     <article class="question-card question-page-card">
         <div class="question-card-left">
             <img
-                src="{% static question.avatar %}"
+                src="{% static question.author.profile.avatar %}"
                 alt="Аватар автора"
                 class="question-avatar"
             >
 
             <div class="vote-box">
                 <button class="vote-btn" type="button">+</button>
-                <div class="vote-count">{{ question.likes }}</div>
+                <div class="vote-count">{{ question.rating|default:0 }}</div>
                 <button class="vote-btn" type="button">−</button>
             </div>
         </div>
@@ -31,15 +31,15 @@
             </p>
 
             <div class="question-meta">
-                <span>Ответов: {{ question.answers_count }}</span>
-                <span>{{ question.created_at }}</span>
-                <span>Автор: {{ question.author }}</span>
+                <span>Ответов: {{ question.answers_count|default:0 }}</span>
+                <span>{{ question.created_at|date:"d.m.Y H:i" }}</span>
+                <span>Автор: {{ question.author.username }}</span>
             </div>
 
             <div class="question-tags">
-                {% for tag in question.tags %}
-                    <a href="{% url 'questions:tag' tag %}" class="tag-link small-tag">
-                        {{ tag }}
+                {% for tag in question.tags.all %}
+                    <a href="{% url 'questions:tag' tag.slug %}" class="tag-link small-tag">
+                        {{ tag.title }}
                     </a>
                 {% endfor %}
             </div>
@@ -55,14 +55,14 @@
             <article class="answer-card">
                 <div class="answer-left">
                     <img
-                        src="{% static answer.avatar %}"
+                        src="{% static answer.author.profile.avatar %}"
                         alt="Аватар автора"
                         class="question-avatar"
                     >
 
                     <div class="vote-box">
                         <button class="vote-btn" type="button">+</button>
-                        <div class="vote-count">{{ answer.likes }}</div>
+                        <div class="vote-count">{{ answer.rating|default:0 }}</div>
                         <button class="vote-btn" type="button">−</button>
                     </div>
                 </div>
@@ -73,38 +73,25 @@
                     </p>
 
                     <div class="answer-meta">
-                        <span>{{ answer.created_at }}</span>
-                        <span>Автор: {{ answer.author }}</span>
+                        <span>{{ answer.created_at|date:"d.m.Y H:i" }}</span>
+                        <span>Автор: {{ answer.author.username }}</span>
                     </div>
 
                     <label class="correct-answer">
                         {% if answer.is_correct %}
-                            <input type="checkbox" checked>
+                            <input type="checkbox" checked disabled>
                             <span>Правильный ответ</span>
                         {% else %}
-                            <input type="checkbox">
-                            <span>Отметить как правильный</span>
+                            <input type="checkbox" disabled>
+                            <span>Ответ не отмечен как правильный</span>
                         {% endif %}
                     </label>
-
-                    <div class="nested-reply">
-                        <div class="nested-reply-header">
-                            <img
-                                src="{% static question.avatar %}"
-                                alt="Аватар автора"
-                                class="nested-avatar"
-                            >
-                            <div>
-                                <div class="nested-author">{{ question.author }}</div>
-                                <div class="nested-date">10 часов назад</div>
-                            </div>
-                        </div>
-                        <p class="nested-text">
-                            Спасибо за ответ.
-                        </p>
-                    </div>
                 </div>
             </article>
+        {% empty %}
+            <div class="empty-content">
+                Пока нет ни одного ответа к этому вопросу.
+            </div>
         {% endfor %}
     </div>
 
@@ -126,7 +113,7 @@
             </div>
 
             <div class="form-text mb-3">
-                Постарайтесь написать развернутый и понятный ответ.
+                Постарайтесь написать развёрнутый и понятный ответ.
             </div>
 
             <button type="submit" class="btn btn-primary">Ответить</button>

@@ -19,6 +19,13 @@
     <div class="question-list">
         {% for question in page.object_list %}
             {% include 'questions/includes/question_card.html' %}
+        {% empty %}
+            <div class="empty-content">
+                <p class="mb-3">Пока нет ни одного вопроса.</p>
+                <a href="{% url 'questions:ask' %}" class="btn btn-primary">
+                    Задать вопрос
+                </a>
+            </div>
         {% endfor %}
     </div>
 

@@ -769,3 +769,13 @@ body {
     background-color: #fafbfc;
     color: #6b7280;
 }
+.questions-subnav .disabled-subnav-link {
+    color: #adb5bd;
+    font-weight: 500;
+    cursor: default;
+}
+
+.top-users-list span {
+    color: #495057;
+    font-size: 1rem;
+}

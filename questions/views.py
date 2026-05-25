@@ -4,8 +4,8 @@ from .models import Answer, Question, Tag
 from .utils import paginate
 
 
-QUESTIONS_PER_PAGE = 10
-ANSWERS_PER_PAGE = 10
+QUESTIONS_PER_PAGE = 5
+ANSWERS_PER_PAGE = 5
 
 
 def index(request):

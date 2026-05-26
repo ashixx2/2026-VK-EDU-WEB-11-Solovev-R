@@ -2,8 +2,10 @@ services:
   db:
     image: postgres:16-alpine
     restart: unless-stopped
-    env_file:
-      - .env.docker
+    environment:
+      POSTGRES_DB: voxpop
+      POSTGRES_USER: voxpop_user
+      POSTGRES_PASSWORD: voxpop_password
     ports:
       - "5432:5432"
     volumes:
@@ -13,6 +15,21 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  maildev:
+    image: maildev/maildev:latest
+    restart: unless-stopped
+    ports:
+      - "1080:1080"
+      - "1025:1025"
 
   web:
     build: .
@@ -28,7 +45,44 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
+      maildev:
+        condition: service_started
+
+  celery:
+    build: .
+    command: celery -A application worker -l info
+    restart: unless-stopped
+    volumes:
+      - .:/app
+      - media_volume:/app/media
+    env_file:
+      - .env.docker
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      maildev:
+        condition: service_started
+
+  celery-beat:
+    build: .
+    command: celery -A application beat -l info
+    restart: unless-stopped
+    volumes:
+      - .:/app
+      - media_volume:/app/media
+    env_file:
+      - .env.docker
+    depends_on:
+      redis:
+        condition: service_started
+      celery:
+        condition: service_started
 
 volumes:
   postgres_data:
+  redis_data:
   media_volume:

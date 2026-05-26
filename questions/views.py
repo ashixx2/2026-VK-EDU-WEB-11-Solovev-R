@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
+from .tasks import send_new_answer_email
 
 from .forms import (
     AnswerForm,
@@ -58,6 +59,8 @@ def question_detail(request, question_id):
 
         if form.is_valid():
             answer = form.save(author=request.user, question=question)
+            send_new_answer_email.delay(answer.id)
+
             page_number = get_answer_page_number(question, ANSWERS_PER_PAGE)
             return redirect(f"{question.get_absolute_url()}?page={page_number}#answer-{answer.id}")
 

@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block title %}{{ question.title }}{% endblock %}
 
@@ -9,20 +8,52 @@
     <article class="question-card question-page-card">
         <div class="question-card-left">
             <img
-                src="{% static question.author.profile.avatar %}"
+                src="{{ question.author.profile.get_avatar_url }}"
                 alt="Аватар автора"
                 class="question-avatar"
             >
 
-            <div class="vote-box">
+            <div class="vote-box" data-vote-box>
                 {% if request.user.is_authenticated %}
-                    <button class="vote-btn" type="button" title="Поставить лайк">+</button>
-                    <div class="vote-count">{{ question.rating|default:0 }}</div>
-                    <button class="vote-btn" type="button" title="Поставить дизлайк">−</button>
+                    <button
+                        class="vote-btn"
+                        type="button"
+                        title="Поставить лайк"
+                        data-vote-button
+                        data-url="{% url 'questions:vote_question' %}"
+                        data-entity-type="question"
+                        data-entity-id="{{ question.id }}"
+                        data-value="like"
+                    >+</button>
+
+                    <div class="vote-count" data-rating>{{ question.rating|default:0 }}</div>
+
+                    <button
+                        class="vote-btn"
+                        type="button"
+                        title="Поставить дизлайк"
+                        data-vote-button
+                        data-url="{% url 'questions:vote_question' %}"
+                        data-entity-type="question"
+                        data-entity-id="{{ question.id }}"
+                        data-value="dislike"
+                    >−</button>
                 {% else %}
-                    <button class="vote-btn" type="button" disabled title="Войдите, чтобы голосовать">+</button>
-                    <div class="vote-count">{{ question.rating|default:0 }}</div>
-                    <button class="vote-btn" type="button" disabled title="Войдите, чтобы голосовать">−</button>
+                    <button
+                        class="vote-btn"
+                        type="button"
+                        disabled
+                        title="Войдите, чтобы голосовать"
+                    >+</button>
+
+                    <div class="vote-count" data-rating>{{ question.rating|default:0 }}</div>
+
+                    <button
+                        class="vote-btn"
+                        type="button"
+                        disabled
+                        title="Войдите, чтобы голосовать"
+                    >−</button>
                 {% endif %}
             </div>
         </div>
@@ -61,20 +92,52 @@
             <article class="answer-card" id="answer-{{ answer.id }}">
                 <div class="answer-left">
                     <img
-                        src="{% static answer.author.profile.avatar %}"
+                        src="{{ answer.author.profile.get_avatar_url }}"
                         alt="Аватар автора"
                         class="question-avatar"
                     >
 
-                    <div class="vote-box">
+                    <div class="vote-box" data-vote-box>
                         {% if request.user.is_authenticated %}
-                            <button class="vote-btn" type="button" title="Поставить лайк">+</button>
-                            <div class="vote-count">{{ answer.rating|default:0 }}</div>
-                            <button class="vote-btn" type="button" title="Поставить дизлайк">−</button>
+                            <button
+                                class="vote-btn"
+                                type="button"
+                                title="Поставить лайк"
+                                data-vote-button
+                                data-url="{% url 'questions:vote_answer' %}"
+                                data-entity-type="answer"
+                                data-entity-id="{{ answer.id }}"
+                                data-value="like"
+                            >+</button>
+
+                            <div class="vote-count" data-rating>{{ answer.rating|default:0 }}</div>
+
+                            <button
+                                class="vote-btn"
+                                type="button"
+                                title="Поставить дизлайк"
+                                data-vote-button
+                                data-url="{% url 'questions:vote_answer' %}"
+                                data-entity-type="answer"
+                                data-entity-id="{{ answer.id }}"
+                                data-value="dislike"
+                            >−</button>
                         {% else %}
-                            <button class="vote-btn" type="button" disabled title="Войдите, чтобы голосовать">+</button>
-                            <div class="vote-count">{{ answer.rating|default:0 }}</div>
-                            <button class="vote-btn" type="button" disabled title="Войдите, чтобы голосовать">−</button>
+                            <button
+                                class="vote-btn"
+                                type="button"
+                                disabled
+                                title="Войдите, чтобы голосовать"
+                            >+</button>
+
+                            <div class="vote-count" data-rating>{{ answer.rating|default:0 }}</div>
+
+                            <button
+                                class="vote-btn"
+                                type="button"
+                                disabled
+                                title="Войдите, чтобы голосовать"
+                            >−</button>
                         {% endif %}
                     </div>
                 </div>
@@ -90,12 +153,28 @@
                     </div>
 
                     <label class="correct-answer">
-                        {% if answer.is_correct %}
-                            <input type="checkbox" checked disabled>
+                        {% if request.user.is_authenticated and request.user.id == question.author_id %}
+                            <input
+                                type="checkbox"
+                                {% if answer.is_correct %}checked{% endif %}
+                                data-correct-answer
+                                data-url="{% url 'questions:mark_correct_answer' %}"
+                                data-question-id="{{ question.id }}"
+                                data-answer-id="{{ answer.id }}"
+                            >
                             <span>Правильный ответ</span>
                         {% else %}
-                            <input type="checkbox" disabled>
-                            <span>Ответ не отмечен как правильный</span>
+                            <input
+                                type="checkbox"
+                                {% if answer.is_correct %}checked{% endif %}
+                                disabled
+                                title="Только автор вопроса может выбрать правильный ответ"
+                            >
+                            {% if answer.is_correct %}
+                                <span>Правильный ответ</span>
+                            {% else %}
+                                <span>Ответ не отмечен как правильный</span>
+                            {% endif %}
                         {% endif %}
                     </label>
                 </div>

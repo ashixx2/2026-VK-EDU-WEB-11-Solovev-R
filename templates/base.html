@@ -61,7 +61,7 @@
                     {% if request.user.is_authenticated %}
                         <div class="user-block d-flex align-items-center justify-content-end gap-2">
                             <img
-                                src="{% static request.user.profile.avatar %}"
+                                src="{{ request.user.profile.get_avatar_url }}"
                                 alt="Аватар пользователя"
                                 class="user-avatar"
                             >
@@ -127,5 +127,6 @@
 </footer>
 
 <script src="{% static 'questions/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'questions/js/ajax.js' %}"></script>
 </body>
 </html>

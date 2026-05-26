@@ -4,7 +4,7 @@ from uuid import uuid4
 from django import forms
 from django.template.defaultfilters import slugify
 
-from .models import Answer, Question, Tag
+from .models import Answer, AnswerLike, Question, QuestionLike, Tag
 
 
 MAX_TAGS_PER_QUESTION = 3
@@ -126,3 +126,36 @@ class AnswerForm(forms.ModelForm):
 def get_answer_page_number(question, answers_per_page):
     answers_count = Answer.objects.filter(question=question).count()
     return max(1, math.ceil(answers_count / answers_per_page))
+
+
+class VoteForm(forms.Form):
+    LIKE = "like"
+    DISLIKE = "dislike"
+
+    VOTE_CHOICES = {
+        LIKE: QuestionLike.LIKE,
+        DISLIKE: QuestionLike.DISLIKE,
+    }
+
+    value = forms.ChoiceField(
+        choices=(
+            (LIKE, "Лайк"),
+            (DISLIKE, "Дизлайк"),
+        ),
+    )
+
+    def get_vote_value(self):
+        return self.VOTE_CHOICES[self.cleaned_data["value"]]
+
+
+class QuestionVoteForm(VoteForm):
+    question_id = forms.IntegerField(min_value=1)
+
+
+class AnswerVoteForm(VoteForm):
+    answer_id = forms.IntegerField(min_value=1)
+
+
+class CorrectAnswerForm(forms.Form):
+    question_id = forms.IntegerField(min_value=1)
+    answer_id = forms.IntegerField(min_value=1)

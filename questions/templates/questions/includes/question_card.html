@@ -3,19 +3,39 @@
 <article class="question-card">
     <div class="question-card-left">
         <img
-            src="{% static question.author.profile.avatar %}"
+            src="{{ question.author.profile.get_avatar_url }}"
             alt="Аватар автора"
             class="question-avatar"
         >
 
-        <div class="vote-box">
+        <div class="vote-box" data-vote-box>
             {% if request.user.is_authenticated %}
-                <button class="vote-btn" type="button" title="Поставить лайк">+</button>
-                <div class="vote-count">{{ question.rating|default:0 }}</div>
-                <button class="vote-btn" type="button" title="Поставить дизлайк">−</button>
+                <button
+                    class="vote-btn"
+                    type="button"
+                    title="Поставить лайк"
+                    data-vote-button
+                    data-url="{% url 'questions:vote_question' %}"
+                    data-entity-type="question"
+                    data-entity-id="{{ question.id }}"
+                    data-value="like"
+                >+</button>
+
+                <div class="vote-count" data-rating>{{ question.rating|default:0 }}</div>
+
+                <button
+                    class="vote-btn"
+                    type="button"
+                    title="Поставить дизлайк"
+                    data-vote-button
+                    data-url="{% url 'questions:vote_question' %}"
+                    data-entity-type="question"
+                    data-entity-id="{{ question.id }}"
+                    data-value="dislike"
+                >−</button>
             {% else %}
                 <button class="vote-btn" type="button" disabled title="Войдите, чтобы голосовать">+</button>
-                <div class="vote-count">{{ question.rating|default:0 }}</div>
+                <div class="vote-count" data-rating>{{ question.rating|default:0 }}</div>
                 <button class="vote-btn" type="button" disabled title="Войдите, чтобы голосовать">−</button>
             {% endif %}
         </div>

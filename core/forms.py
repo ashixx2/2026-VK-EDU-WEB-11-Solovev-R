@@ -1,9 +1,15 @@
+from pathlib import Path
+
 from django import forms
 from django.contrib.auth import authenticate, password_validation
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 from questions.models import Profile
+
+
+MAX_AVATAR_SIZE = 2 * 1024 * 1024
+ALLOWED_AVATAR_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
 
 
 class LoginForm(forms.Form):
@@ -144,7 +150,7 @@ class SignupForm(forms.Form):
             first_name=self.cleaned_data.get("first_name", ""),
         )
 
-        Profile.objects.create(user=user)
+        Profile.objects.get_or_create(user=user)
 
         return user
 
@@ -163,6 +169,14 @@ class ProfileForm(forms.Form):
         widget=forms.EmailInput(attrs={
             "class": "form-control",
             "id": "profile-email",
+        }),
+    )
+    avatar = forms.ImageField(
+        label="Аватарка",
+        required=False,
+        widget=forms.ClearableFileInput(attrs={
+            "class": "form-control",
+            "id": "profile-avatar",
         }),
     )
 
@@ -190,9 +204,32 @@ class ProfileForm(forms.Form):
 
         return email
 
+    def clean_avatar(self):
+        avatar = self.cleaned_data.get("avatar")
+
+        if not avatar:
+            return avatar
+
+        extension = Path(avatar.name).suffix.lower()
+
+        if extension not in ALLOWED_AVATAR_EXTENSIONS:
+            raise ValidationError("Допустимые форматы аватарки: jpg, jpeg, png, gif, webp.")
+
+        if avatar.size > MAX_AVATAR_SIZE:
+            raise ValidationError("Размер аватарки не должен превышать 2 МБ.")
+
+        return avatar
+
     def save(self):
         self.user.username = self.cleaned_data["username"]
         self.user.email = self.cleaned_data["email"]
         self.user.save(update_fields=["username", "email"])
+
+        profile, _ = Profile.objects.get_or_create(user=self.user)
+        avatar = self.cleaned_data.get("avatar")
+
+        if avatar:
+            profile.avatar = avatar
+            profile.save(update_fields=["avatar"])
 
         return self.user

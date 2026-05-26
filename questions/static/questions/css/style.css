@@ -793,3 +793,12 @@ body {
     cursor: not-allowed;
     opacity: 0.55;
 }
+.vote-btn-active {
+    font-weight: 700;
+    border-color: #0d6efd;
+}
+
+.vote-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}

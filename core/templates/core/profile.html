@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block title %}VoxPop — Профиль{% endblock %}
 
@@ -7,19 +6,19 @@
 <div class="content-card">
     <h1 class="page-title">Настройки профиля</h1>
 
-    <form action="{% url 'core:profile' %}" method="post" class="profile-form">
+    <form action="{% url 'core:profile' %}" method="post" class="profile-form" enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="row g-4 align-items-start">
             <div class="col-12 col-md-4">
                 <div class="profile-avatar-card">
                     <img
-                        src="{% static request.user.profile.avatar %}"
+                        src="{{ request.user.profile.get_avatar_url }}"
                         alt="Текущая аватарка"
                         class="profile-avatar-preview"
                     >
                     <div class="form-text mt-3">
-                        Текущая аватарка пользователя. В этом задании загрузка новой аватарки не сохраняется.
+                        Текущая аватарка пользователя.
                     </div>
                 </div>
             </div>
@@ -54,18 +53,16 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="profile-avatar" class="form-label ask-label">Аватарка</label>
-                    <input
-                        type="file"
-                        id="profile-avatar"
-                        name="avatar"
-                        class="form-control"
-                        disabled
-                        title="Загрузка аватарки в этом задании не реализуется"
-                    >
+                    <label for="{{ form.avatar.id_for_label }}" class="form-label ask-label">
+                        {{ form.avatar.label }}
+                    </label>
+                    {{ form.avatar }}
                     <div class="form-text">
-                        Поле показано по заданию, но сохранение файла аватарки сейчас не выполняется.
+                        Допустимые форматы: jpg, jpeg, png, gif, webp. Максимальный размер: 2 МБ.
                     </div>
+                    {% for error in form.avatar.errors %}
+                        <div class="form-error mt-2">{{ error }}</div>
+                    {% endfor %}
                 </div>
 
                 <div class="d-flex flex-wrap gap-2">

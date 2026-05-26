@@ -155,3 +155,53 @@ MEDIA_ROOT = BASE_DIR / "media"
 # Default primary key field type
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+# Redis
+
+REDIS_HOST = os.getenv("REDIS_HOST", "127.0.0.1")
+REDIS_PORT = os.getenv("REDIS_PORT", "6379")
+REDIS_CACHE_DB = os.getenv("REDIS_CACHE_DB", "0")
+REDIS_BROKER_DB = os.getenv("REDIS_BROKER_DB", "1")
+REDIS_BEAT_DB = os.getenv("REDIS_BEAT_DB", "2")
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_CACHE_DB}",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+        "TIMEOUT": 60 * 10,
+    }
+}
+
+
+# Celery
+
+CELERY_BROKER_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_BROKER_DB}"
+CELERY_RESULT_BACKEND = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_BEAT_DB}"
+
+CELERY_BEAT_SCHEDULER = "redbeat.RedBeatScheduler"
+CELERY_REDBEAT_REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_BEAT_DB}"
+
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+CELERY_BEAT_SCHEDULE = {
+    "debug-celery-beat-every-5-minutes": {
+        "task": "questions.tasks.debug_celery_beat",
+        "schedule": 300.0,
+    },
+}
+
+
+# Email
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.getenv("EMAIL_HOST", "127.0.0.1")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", "1025"))
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "False").lower() in ("true", "1", "yes")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "VoxPop <no-reply@voxpop.local>")
+
+SITE_URL = os.getenv("SITE_URL", "http://127.0.0.1:8000")

@@ -68,7 +68,11 @@ def logout_view(request):
 
 @login_required(login_url="core:login")
 def profile(request):
-    form = ProfileForm(request.POST or None, user=request.user)
+    form = ProfileForm(
+        request.POST or None,
+        request.FILES or None,
+        user=request.user,
+    )
 
     if request.method == "POST" and form.is_valid():
         form.save()

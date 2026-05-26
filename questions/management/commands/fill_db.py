@@ -112,7 +112,6 @@ class Command(BaseCommand):
             profiles.append(
                 Profile(
                     user_id=user.id,
-                    avatar=random.choice(AVATARS),
                 )
             )
 

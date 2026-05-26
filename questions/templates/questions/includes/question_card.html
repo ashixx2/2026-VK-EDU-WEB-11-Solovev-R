@@ -3,7 +3,7 @@
 <article class="question-card">
     <div class="question-card-left">
         <img
-            src="{% static question.author.profile.avatar %}"
+            src="{{ question.author.profile.get_avatar_url }}"
             alt="Аватар автора"
             class="question-avatar"
         >

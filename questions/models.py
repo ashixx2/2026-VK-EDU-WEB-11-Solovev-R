@@ -1,9 +1,16 @@
+from pathlib import Path
+from uuid import uuid4
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Count, IntegerField, OuterRef, Subquery, Sum
 from django.db.models.functions import Coalesce
+from django.templatetags.static import static
 from django.urls import reverse
 
+def profile_avatar_upload_to(instance, filename):
+    extension = Path(filename).suffix.lower()
+    return f"avatars/user_{instance.user_id}/{uuid4().hex}{extension}"
 
 class Profile(models.Model):
     user = models.OneToOneField(
@@ -12,9 +19,10 @@ class Profile(models.Model):
         related_name="profile",
         verbose_name="пользователь",
     )
-    avatar = models.CharField(
-        max_length=255,
-        default="questions/img/avatar.png",
+    avatar = models.ImageField(
+        upload_to=profile_avatar_upload_to,
+        blank=True,
+        null=True,
         verbose_name="аватар",
     )
 
@@ -25,6 +33,11 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+    def get_avatar_url(self):
+        if self.avatar and self.avatar.name and self.avatar.storage.exists(self.avatar.name):
+            return self.avatar.url
+
+        return static("questions/img/avatar.png")
 
 class Tag(models.Model):
     title = models.CharField(
